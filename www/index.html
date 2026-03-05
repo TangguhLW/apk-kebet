@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BantenTrip – Jelajahi Keindahan Banten</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean: #0a3d5c;
+      --ocean-mid: #1a6b8a;
+      --teal: #2ab3c0;
+      --sand: #f5e6c8;
+      --cream: #fdf8f0;
+      --sunset: #e8834a;
+      --sunset-dark: #c9622e;
+      --forest: #2d6a4f;
+      --text-dark: #1a1a2e;
+      --text-mid: #4a5568;
+      --white: #ffffff;
+      --shadow: 0 8px 32px rgba(10,61,92,0.13);
+      --radius: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,61,92,0.97); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px; box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg,var(--sunset),var(--teal)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .nav-logo span { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--white); font-weight: 700; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-cta { background: var(--sunset); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: background .2s, transform .15s; }
+    .nav-cta:hover { background: var(--sunset-dark); transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 25px; height: 2px; background: white; border-radius: 2px; transition: .3s; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; position: relative;
+      background: linear-gradient(160deg, #0a3d5c 0%, #1a6b8a 40%, #2ab3c0 75%, #2d6a4f 100%);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .hero-bg-shapes { position: absolute; inset: 0; overflow: hidden; }
+    .hero-bg-shapes::before {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,179,192,0.25), transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .hero-bg-shapes::after {
+      content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,131,74,0.2), transparent 70%);
+      bottom: -80px; left: -80px;
+    }
+    .wave-svg { position: absolute; bottom: -2px; left: 0; right: 0; }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; max-width: 800px; animation: fadeUp 1s ease; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 20px; border-radius: 50px; font-size: 0.82rem; font-weight: 500; letter-spacing: 1px; margin-bottom: 24px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: white; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 span { color: var(--sand); font-style: italic; }
+    .hero p { color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.7; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--sunset); color: white; border: none; padding: 14px 36px; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all .25s; box-shadow: 0 4px 20px rgba(232,131,74,0.4); }
+    .btn-primary:hover { background: var(--sunset-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,131,74,0.5); }
+    .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); padding: 14px 36px; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all .25s; }
+    .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+    .hero-stats { position: relative; z-index: 2; display: flex; justify-content: center; gap: 48px; margin-top: 60px; flex-wrap: wrap; }
+    .stat { text-align: center; color: white; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--sand); }
+    .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+    /* SECTIONS */
+    section { padding: 90px 5%; }
+    .section-tag { display: inline-block; background: rgba(42,179,192,0.12); color: var(--teal); padding: 6px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--ocean); margin-bottom: 14px; line-height: 1.2; }
+    .section-sub { color: var(--text-mid); font-size: 1rem; line-height: 1.7; max-width: 560px; }
+    .section-head { margin-bottom: 56px; }
+
+    /* DESTINASI */
+    #destinasi { background: white; }
+    .dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
+    .dest-card {
+      background: var(--cream); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s; cursor: pointer;
+      animation: fadeUp .7s ease both;
+    }
+    .dest-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(10,61,92,0.18); }
+    .dest-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+    .dest-img-overlay { position: absolute; inset: 0; }
+    .dest-img-emoji { position: relative; z-index: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+    .dest-badge { position: absolute; top: 14px; right: 14px; z-index: 2; background: var(--sunset); color: white; font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 50px; }
+    .dest-body { padding: 22px; }
+    .dest-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--ocean); margin-bottom: 8px; }
+    .dest-desc { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 16px; }
+    .dest-footer { display: flex; align-items: center; justify-content: space-between; }
+    .dest-price { font-weight: 700; color: var(--forest); font-size: 1rem; }
+    .dest-price span { font-size: 0.75rem; color: var(--text-mid); font-weight: 400; }
+    .btn-dest { background: var(--ocean); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 0.82rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; transition: background .2s; }
+    .btn-dest:hover { background: var(--ocean-mid); }
+
+    /* BOOKING FORM */
+    #booking { background: linear-gradient(135deg, #f0f9ff 0%, var(--cream) 100%); }
+    .booking-wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: 60px; align-items: start; }
+    .booking-info h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--ocean); margin-bottom: 16px; }
+    .booking-info p { color: var(--text-mid); line-height: 1.7; margin-bottom: 28px; }
+    .info-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+    .info-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .info-icon.blue { background: rgba(10,61,92,0.1); }
+    .info-icon.green { background: rgba(45,106,79,0.1); }
+    .info-icon.orange { background: rgba(232,131,74,0.1); }
+    .info-text strong { display: block; color: var(--ocean); font-size: 0.9rem; margin-bottom: 3px; }
+    .info-text span { color: var(--text-mid); font-size: 0.83rem; }
+
+    .form-card { background: white; border-radius: 24px; padding: 40px; box-shadow: 0 12px 48px rgba(10,61,92,0.1); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: 1/-1; }
+    label { font-size: 0.83rem; font-weight: 600; color: var(--ocean); }
+    input, select, textarea {
+      padding: 12px 16px; border: 2px solid #e2eaf0; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-size: 0.88rem; color: var(--text-dark);
+      background: #f8fbfd; transition: border-color .2s, box-shadow .2s; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,179,192,0.12); background: white; }
+    .qty-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .qty-box { display: flex; align-items: center; border: 2px solid #e2eaf0; border-radius: 10px; overflow: hidden; background: #f8fbfd; }
+    .qty-box button { background: none; border: none; width: 38px; height: 44px; font-size: 1.2rem; cursor: pointer; color: var(--ocean); transition: background .15s; font-weight: 700; }
+    .qty-box button:hover { background: rgba(42,179,192,0.12); }
+    .qty-box input { border: none; border-radius: 0; text-align: center; width: 100%; background: transparent; padding: 0; }
+    .payment-opts { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pay-opt { display: none; }
+    .pay-label {
+      padding: 9px 18px; border: 2px solid #e2eaf0; border-radius: 50px;
+      font-size: 0.83rem; font-weight: 500; cursor: pointer; transition: all .2s; color: var(--text-mid);
+    }
+    .pay-opt:checked + .pay-label { border-color: var(--teal); color: var(--teal); background: rgba(42,179,192,0.08); font-weight: 600; }
+    .price-summary { background: linear-gradient(135deg, var(--ocean), var(--ocean-mid)); border-radius: 14px; padding: 20px 24px; margin-top: 24px; color: white; }
+    .price-summary .price-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.88rem; color: rgba(255,255,255,0.8); }
+    .price-summary .price-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); }
+    .price-summary .price-total span:first-child { font-weight: 600; font-size: 0.9rem; }
+    .price-summary .price-total span:last-child { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--sand); }
+    .btn-book { width: 100%; background: var(--sunset); color: white; border: none; padding: 16px; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 20px; transition: all .25s; box-shadow: 0 4px 20px rgba(232,131,74,0.35); }
+    .btn-book:hover { background: var(--sunset-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,131,74,0.45); }
+    .error-msg { color: #e53e3e; font-size: 0.78rem; margin-top: 2px; display: none; }
+
+    /* ABOUT */
+    #about { background: var(--ocean); }
+    #about .section-tag { background: rgba(255,255,255,0.12); color: var(--sand); }
+    #about .section-title { color: var(--white); }
+    #about .section-sub { color: rgba(255,255,255,0.75); }
+    .about-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; }
+    .about-text p { color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 16px; font-size: 0.95rem; }
+    .about-highlight { background: rgba(255,255,255,0.07); border-left: 3px solid var(--teal); padding: 18px 22px; border-radius: 0 12px 12px 0; margin: 24px 0; color: rgba(255,255,255,0.9); font-style: italic; line-height: 1.7; }
+    .dev-cards { display: flex; flex-direction: column; gap: 20px; }
+    .dev-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 24px; display: flex; align-items: center; gap: 20px; transition: transform .3s, background .3s; }
+    .dev-card:hover { transform: translateX(8px); background: rgba(255,255,255,0.13); }
+    .dev-avatar { width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.2); }
+    .dev-info h3 { color: white; font-size: 1rem; font-weight: 600; margin-bottom: 5px; }
+    .dev-info p { color: rgba(255,255,255,0.65); font-size: 0.82rem; margin-bottom: 8px; }
+    .dev-tag { display: inline-block; background: rgba(42,179,192,0.25); color: var(--teal); padding: 3px 12px; border-radius: 50px; font-size: 0.74rem; font-weight: 600; }
+
+    /* FOOTER */
+    footer { background: #06253a; padding: 48px 5% 28px; }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand .nav-logo { margin-bottom: 14px; display: inline-flex; }
+    .footer-brand p { color: rgba(255,255,255,0.55); font-size: 0.85rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 18px; }
+    .footer-col a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: color .2s; }
+    .footer-col a:hover { color: var(--teal); }
+    .social-row { display: flex; gap: 12px; margin-top: 16px; }
+    .social-btn { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 1rem; text-decoration: none; transition: background .2s; }
+    .social-btn:hover { background: var(--teal); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; }
+    .footer-bottom p { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+    .footer-bottom span { color: var(--teal); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(10,30,50,0.7); backdrop-filter: blur(6px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; animation: fadeIn .3s ease; }
+    .modal-box { background: white; border-radius: 24px; max-width: 520px; width: 100%; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.3); animation: slideUp .4s ease; }
+    .modal-header { background: linear-gradient(135deg, var(--ocean), var(--ocean-mid)); padding: 32px; text-align: center; }
+    .modal-icon { font-size: 3rem; margin-bottom: 12px; }
+    .modal-header h2 { font-family: 'Playfair Display', serif; color: white; font-size: 1.6rem; margin-bottom: 6px; }
+    .modal-header p { color: rgba(255,255,255,0.8); font-size: 0.88rem; }
+    .modal-body { padding: 30px; }
+    .booking-id { background: linear-gradient(135deg, var(--cream), #fff); border: 2px dashed var(--teal); border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 24px; }
+    .booking-id-label { font-size: 0.75rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .booking-id-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--ocean); font-weight: 700; letter-spacing: 2px; }
+    .modal-details { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+    .detail-row:last-child { border: none; }
+    .detail-row .dlabel { font-size: 0.83rem; color: var(--text-mid); }
+    .detail-row .dval { font-size: 0.9rem; color: var(--ocean); font-weight: 600; }
+    .modal-total { background: var(--ocean); border-radius: 14px; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-total span { color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+    .modal-total strong { font-family: 'Playfair Display', serif; color: var(--sand); font-size: 1.5rem; }
+    .modal-btns { display: flex; gap: 12px; }
+    .btn-modal-close { flex: 1; background: #f0f4f8; color: var(--text-dark); border: none; padding: 13px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: background .2s; }
+    .btn-modal-close:hover { background: #e2eaf0; }
+    .btn-modal-dl { flex: 1.5; background: var(--sunset); color: white; border: none; padding: 13px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all .2s; }
+    .btn-modal-dl:hover { background: var(--sunset-dark); transform: translateY(-1px); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .booking-wrap, .about-content, .footer-top { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--ocean); padding: 20px 5%; gap: 16px; }
+      .hero-stats { gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    @media (max-width: 560px) {
+      section { padding: 70px 5%; }
+      .hero h1 { font-size: 2rem; }
+    }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--forest); color: white; padding: 14px 24px; border-radius: 12px; font-size: 0.88rem; font-weight: 500; z-index: 3000; transform: translateY(80px); opacity: 0; transition: all .4s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <div class="nav-logo-icon">🌊</div>
+    <span>BantenTrip</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Beranda</a></li>
+    <li><a href="#destinasi">Destinasi</a></li>
+    <li><a href="#booking">Booking</a></li>
+    <li><a href="#about">Tentang</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Pesan Sekarang</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-shapes"></div>
+  <div style="position:relative;z-index:2;text-align:center;width:100%">
+    <div class="hero-content">
+      <div class="hero-badge">✦ Destinasi Wisata Terbaik Banten</div>
+      <h1>Jelajahi <span>Keindahan</span><br>Banten Bersamamu</h1>
+      <p>Dari hamparan pasir Pantai Anyer hingga magisnya Kawah Krakatau — pesan tiket wisatamu sekarang dan ciptakan kenangan tak terlupakan.</p>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-primary">🎫 Pesan Tiket</a>
+        <a href="#destinasi" class="btn-outline">Lihat Destinasi</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Destinasi Pilihan</div></div>
+      <div class="stat"><div class="stat-num">10rb+</div><div class="stat-label">Wisatawan Puas</div></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Rating Aplikasi</div></div>
+    </div>
+  </div>
+  <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 80L48 68C96 56 192 32 288 26.7C384 21 480 35 576 43.3C672 51 768 53 864 48C960 43 1056 32 1152 29.3C1248 27 1344 32 1392 35L1440 37.3V80H0Z" fill="white"/>
+  </svg>
+</section>
+
+<!-- DESTINASI -->
+<section id="destinasi">
+  <div class="section-head reveal">
+    <span class="section-tag">🗺 Destinasi</span>
+    <h2 class="section-title">Pilih Tujuan Wisatamu</h2>
+    <p class="section-sub">Temukan destinasi impianmu di Banten — dari pantai eksotis hingga kearifan lokal suku Baduy.</p>
+  </div>
+  <div class="dest-grid" id="destGrid"></div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="booking-wrap">
+    <div class="booking-info reveal">
+      <span class="section-tag">🎫 Booking</span>
+      <h2 class="section-title">Pesan Tiket<br>Sekarang</h2>
+      <p class="section-sub">Isi formulir pemesanan dengan lengkap dan benar. Tiket akan dikirim ke email Anda setelah pembayaran terkonfirmasi.</p>
+      <div class="info-item">
+        <div class="info-icon blue">⚡</div>
+        <div class="info-text"><strong>Konfirmasi Instan</strong><span>Terima konfirmasi booking dalam hitungan detik</span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon green">🔒</div>
+        <div class="info-text"><strong>Pembayaran Aman</strong><span>Transaksi terenkripsi dan terjamin keamanannya</span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon orange">🎟</div>
+        <div class="info-text"><strong>E-Tiket Langsung</strong><span>Download tiket digital dan tunjukkan di lokasi</span></div>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form id="bookForm" onsubmit="submitBooking(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nama Lengkap *</label>
+            <input type="text" id="fname" placeholder="Nama Anda"/>
+            <span class="error-msg" id="err-fname">Nama wajib diisi</span>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="femail" placeholder="email@contoh.com"/>
+            <span class="error-msg" id="err-femail">Email tidak valid</span>
+          </div>
+          <div class="form-group">
+            <label>No. WhatsApp *</label>
+            <input type="tel" id="fphone" placeholder="08xxxxxxxxxx"/>
+            <span class="error-msg" id="err-fphone">Nomor WA wajib diisi</span>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Kunjungan *</label>
+            <input type="date" id="fdate"/>
+            <span class="error-msg" id="err-fdate">Pilih tanggal kunjungan</span>
+          </div>
+          <div class="form-group full">
+            <label>Pilih Destinasi *</label>
+            <select id="fdest">
+              <option value="">-- Pilih Destinasi --</option>
+            </select>
+            <span class="error-msg" id="err-fdest">Pilih destinasi terlebih dahulu</span>
+          </div>
+          <div class="form-group full">
+            <label>Jumlah Tiket</label>
+            <div class="qty-row">
+              <div>
+                <div style="font-size:0.78rem;color:var(--text-mid);margin-bottom:6px;">Dewasa</div>
+                <div class="qty-box">
+                  <button type="button" onclick="changeQty('adult',-1)">−</button>
+                  <input type="number" id="fadult" value="1" min="1" max="20" readonly/>
+                  <button type="button" onclick="changeQty('adult',1)">+</button>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:0.78rem;color:var(--text-mid);margin-bottom:6px;">Anak-anak</div>
+                <div class="qty-box">
+                  <button type="button" onclick="changeQty('child',-1)">−</button>
+                  <input type="number" id="fchild" value="0" min="0" max="20" readonly/>
+                  <button type="button" onclick="changeQty('child',1)">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label>Metode Pembayaran *</label>
+            <div class="payment-opts">
+              <input type="radio" name="pay" id="p1" value="Transfer Bank" class="pay-opt" checked/>
+              <label for="p1" class="pay-label">🏦 Transfer Bank</label>
+              <input type="radio" name="pay" id="p2" value="QRIS" class="pay-opt"/>
+              <label for="p2" class="pay-label">📱 QRIS</label>
+              <input type="radio" name="pay" id="p3" value="OVO" class="pay-opt"/>
+              <label for="p3" class="pay-label">💜 OVO</label>
+              <input type="radio" name="pay" id="p4" value="GoPay" class="pay-opt"/>
+              <label for="p4" class="pay-label">💚 GoPay</label>
+            </div>
+          </div>
+        </div>
+        <div class="price-summary">
+          <div class="price-row"><span id="ps-dest">Belum ada destinasi dipilih</span></div>
+          <div class="price-row"><span id="ps-adult">Dewasa: 0 × Rp0</span><span id="ps-adult-total">Rp0</span></div>
+          <div class="price-row"><span id="ps-child">Anak: 0 × Rp0</span><span id="ps-child-total">Rp0</span></div>
+          <div class="price-total"><span>Total Pembayaran</span><span id="ps-total">Rp0</span></div>
+        </div>
+        <button type="submit" class="btn-book">🎫 Konfirmasi Booking</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-content">
+    <div class="about-text reveal">
+      <span class="section-tag">👥 Tentang Kami</span>
+      <h2 class="section-title" style="color:white">Dibuat dengan ❤️<br>untuk Banten</h2>
+      <p>BantenTrip adalah platform digital yang hadir untuk memudahkan para wisatawan dalam menjelajahi kekayaan alam dan budaya Provinsi Banten, Indonesia.</p>
+      <p>Kami percaya bahwa setiap perjalanan adalah sebuah cerita. Misi kami adalah memastikan perjalananmu ke Banten dimulai dengan mudah, nyaman, dan penuh kegembiraan sejak proses pemesanan tiket.</p>
+      <div class="about-highlight">
+        "Banten bukan hanya destinasi — Banten adalah pengalaman yang akan selalu ingin kamu ulangi."
+      </div>
+      <p style="color:rgba(255,255,255,0.7);font-size:0.85rem;">© 2024 BantenTrip. Aplikasi ini dikembangkan sebagai platform pemesanan tiket wisata digital untuk mendukung pariwisata daerah Banten.</p>
+    </div>
+    <div class="dev-cards reveal">
+      <div class="dev-card">
+        <div class="dev-avatar" style="background:linear-gradient(135deg,#2ab3c0,#0a3d5c)">RH</div>
+        <div class="dev-info">
+          <h3>Rayhan Hendriansyah Putra</h3>
+          <p>Pengembang utama yang merancang dan membangun seluruh antarmuka pengguna serta sistem booking BantenTrip.</p>
+          <span class="dev-tag">🖥 Front-End Developer</span>
+        </div>
+      </div>
+      <div class="dev-card">
+        <div class="dev-avatar" style="background:linear-gradient(135deg,#e8834a,#2d6a4f)">AF</div>
+        <div class="dev-info">
+          <h3>Abdul Faqih</h3>
+          <p>Bertanggung jawab atas desain sistem, pengelolaan data destinasi, dan pengalaman pengguna secara keseluruhan.</p>
+          <span class="dev-tag">🎨 UI/UX & Back-End</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#home" class="nav-logo">
+        <div class="nav-logo-icon">🌊</div>
+        <span>BantenTrip</span>
+      </a>
+      <p>Platform pemesanan tiket wisata digital untuk menjelajahi keindahan Provinsi Banten dengan mudah dan nyaman.</p>
+      <div class="social-row">
+        <a href="#" class="social-btn">📘</a>
+        <a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">🐦</a>
+        <a href="#" class="social-btn">📺</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Destinasi</h4>
+      <a href="#">Pantai Anyer</a>
+      <a href="#">Kawah Krakatau</a>
+      <a href="#">Desa Baduy</a>
+      <a href="#">Tanjung Lesung</a>
+      <a href="#">Pantai Sawarna</a>
+      <a href="#">Masjid Agung Banten</a>
+    </div>
+    <div class="footer-col">
+      <h4>Informasi</h4>
+      <a href="#">Cara Booking</a>
+      <a href="#">Syarat & Ketentuan</a>
+      <a href="#">Kebijakan Privasi</a>
+      <a href="#">FAQ</a>
+      <a href="#">Hubungi Kami</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 BantenTrip. Dikembangkan oleh <span>Rayhan Hendriansyah Putra</span> & <span>Abdul Faqih</span></p>
+    <p style="color:rgba(255,255,255,0.3);">Made with ❤️ for Banten Tourism</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-icon">🎉</div>
+      <h2>Booking Berhasil!</h2>
+      <p>Tiket wisatamu telah dikonfirmasi. Selamat berlibur!</p>
+    </div>
+    <div class="modal-body">
+      <div class="booking-id">
+        <div class="booking-id-label">Nomor Booking</div>
+        <div class="booking-id-num" id="bookingNum">BNT-2024-XXXX</div>
+      </div>
+      <div class="modal-details" id="modalDetails"></div>
+      <div class="modal-total">
+        <span>Total Pembayaran</span>
+        <strong id="modalTotal">Rp0</strong>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-modal-close" onclick="closeModal()">✕ Tutup</button>
+        <button class="btn-modal-dl" onclick="downloadTicket()">⬇ Download Tiket</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Tiket berhasil diunduh!</div>
+
+<script>
+  const destinations = [
+    { name: "Pantai Anyer", emoji: "🏖", gradient: "linear-gradient(135deg,#0ea5e9,#0369a1)", desc: "Pantai legendaris dengan pasir putih, sunset memukau, dan ombak yang tenang. Surga para pecinta laut.", priceAdult: 50000, priceChild: 25000, badge: "Terpopuler" },
+    { name: "Kawah Anak Krakatau", emoji: "🌋", gradient: "linear-gradient(135deg,#dc2626,#7c3aed)", desc: "Saksikan keajaiban alam dari gunung berapi aktif yang menakjubkan di tengah Selat Sunda.", priceAdult: 120000, priceChild: 75000, badge: "Petualangan" },
+    { name: "Desa Wisata Baduy", emoji: "🏡", gradient: "linear-gradient(135deg,#16a34a,#065f46)", desc: "Rasakan kearifan lokal suku Baduy yang masih menjaga adat istiadat leluhur dengan penuh ketulusan.", priceAdult: 80000, priceChild: 40000, badge: "Budaya" },
+    { name: "Tanjung Lesung", emoji: "⛵", gradient: "linear-gradient(135deg,#0891b2,#164e63)", desc: "Kawasan wisata bahari eksklusif dengan resort, diving, dan pemandangan laut biru yang memesona.", priceAdult: 95000, priceChild: 50000, badge: "Eksotis" },
+    { name: "Pantai Sawarna", emoji: "🌊", gradient: "linear-gradient(135deg,#2563eb,#1e40af)", desc: "Surga tersembunyi dengan ombak besar untuk surfing, gua karang, dan keindahan alam yang perawan.", priceAdult: 65000, priceChild: 35000, badge: "Hidden Gem" },
+    { name: "Masjid Agung Banten", emoji: "🕌", gradient: "linear-gradient(135deg,#b45309,#78350f)", desc: "Peninggalan Kesultanan Banten abad ke-16, warisan sejarah dan arsitektur Islam yang agung dan megah.", priceAdult: 30000, priceChild: 15000, badge: "Sejarah" },
+  ];
+
+  function fmtRp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
+
+  // Build destination cards
+  const grid = document.getElementById('destGrid');
+  const sel = document.getElementById('fdest');
+  destinations.forEach((d, i) => {
+    const card = document.createElement('div');
+    card.className = 'dest-card reveal';
+    card.style.animationDelay = (i * 0.1) + 's';
+    card.innerHTML = `
+      <div class="dest-img" style="background:${d.gradient}">
+        <div class="dest-img-overlay" style="background:${d.gradient};opacity:0.85"></div>
+        <div class="dest-img-emoji">${d.emoji}</div>
+        ${d.badge ? `<div class="dest-badge">${d.badge}</div>` : ''}
+      </div>
+      <div class="dest-body">
+        <div class="dest-name">${d.name}</div>
+        <div class="dest-desc">${d.desc}</div>
+        <div class="dest-footer">
+          <div class="dest-price">${fmtRp(d.priceAdult)} <span>/ dewasa</span></div>
+          <button class="btn-dest" onclick="selectDest(${i})">Pilih</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = d.name;
+    sel.appendChild(opt);
+  });
+
+  function selectDest(i) {
+    sel.value = i;
+    updatePrice();
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Quantity controls
+  function changeQty(type, delta) {
+    const el = document.getElementById(type === 'adult' ? 'fadult' : 'fchild');
+    let v = parseInt(el.value) + delta;
+    if (type === 'adult') v = Math.max(1, Math.min(20, v));
+    else v = Math.max(0, Math.min(20, v));
+    el.value = v;
+    updatePrice();
+  }
+
+  function updatePrice() {
+    const di = sel.value;
+    const adult = parseInt(document.getElementById('fadult').value) || 0;
+    const child = parseInt(document.getElementById('fchild').value) || 0;
+    if (di === '') {
+      document.getElementById('ps-dest').textContent = 'Belum ada destinasi dipilih';
+      document.getElementById('ps-adult').textContent = `Dewasa: ${adult} × Rp0`;
+      document.getElementById('ps-child').textContent = `Anak: ${child} × Rp0`;
+      document.getElementById('ps-adult-total').textContent = 'Rp0';
+      document.getElementById('ps-child-total').textContent = 'Rp0';
+      document.getElementById('ps-total').textContent = 'Rp0';
+      return;
+    }
+    const d = destinations[parseInt(di)];
+    const totalAdult = adult * d.priceAdult;
+    const totalChild = child * d.priceChild;
+    document.getElementById('ps-dest').textContent = `📍 ${d.name}`;
+    document.getElementById('ps-adult').textContent = `Dewasa: ${adult} × ${fmtRp(d.priceAdult)}`;
+    document.getElementById('ps-child').textContent = `Anak: ${child} × ${fmtRp(d.priceChild)}`;
+    document.getElementById('ps-adult-total').textContent = fmtRp(totalAdult);
+    document.getElementById('ps-child-total').textContent = fmtRp(totalChild);
+    document.getElementById('ps-total').textContent = fmtRp(totalAdult + totalChild);
+  }
+
+  sel.addEventListener('change', updatePrice);
+
+  // Form validation & submit
+  function validate() {
+    let ok = true;
+    const fields = [
+      { id: 'fname', err: 'err-fname', check: v => v.trim().length > 1 },
+      { id: 'femail', err: 'err-femail', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+      { id: 'fphone', err: 'err-fphone', check: v => v.trim().length >= 10 },
+      { id: 'fdate', err: 'err-fdate', check: v => v !== '' },
+      { id: 'fdest', err: 'err-fdest', check: v => v !== '' },
+    ];
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      const err = document.getElementById(f.err);
+      if (!f.check(el.value)) { err.style.display = 'block'; el.style.borderColor = '#fc8181'; ok = false; }
+      else { err.style.display = 'none'; el.style.borderColor = ''; }
+    });
+    return ok;
+  }
+
+  function submitBooking(e) {
+    e.preventDefault();
+    if (!validate()) return;
+    const di = parseInt(sel.value);
+    const d = destinations[di];
+    const adult = parseInt(document.getElementById('fadult').value);
+    const child = parseInt(document.getElementById('fchild').value);
+    const total = adult * d.priceAdult + child * d.priceChild;
+    const pay = document.querySelector('input[name="pay"]:checked').value;
+    const date = new Date(document.getElementById('fdate').value);
+    const dateStr = date.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const bookNum = 'BNT-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+    document.getElementById('bookingNum').textContent = bookNum;
+    document.getElementById('modalDetails').innerHTML = `
+      <div class="detail-row"><span class="dlabel">Nama Pemesan</span><span class="dval">${document.getElementById('fname').value}</span></div>
+      <div class="detail-row"><span class="dlabel">Destinasi</span><span class="dval">${d.emoji} ${d.name}</span></div>
+      <div class="detail-row"><span class="dlabel">Tanggal Kunjungan</span><span class="dval">${dateStr}</span></div>
+      <div class="detail-row"><span class="dlabel">Tiket Dewasa</span><span class="dval">${adult} orang</span></div>
+      <div class="detail-row"><span class="dlabel">Tiket Anak</span><span class="dval">${child} orang</span></div>
+      <div class="detail-row"><span class="dlabel">Metode Pembayaran</span><span class="dval">${pay}</span></div>
+    `;
+    document.getElementById('modalTotal').textContent = fmtRp(total);
+    document.getElementById('modal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.getElementById('bookForm').reset();
+    updatePrice();
+  }
+
+  function downloadTicket() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Hamburger menu
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Set min date to today
+  document.getElementById('fdate').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
